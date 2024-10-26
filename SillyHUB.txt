@@ -1,0 +1,175 @@
+local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
+
+local Window = OrionLib:MakeWindow({Name = "Silly Hub V1.9", HidePremium = true})
+
+-- Kategoria "General"
+local GeneralTab = Window:MakeTab({
+    Name = "General",
+    Icon = "rbxassetid://4483345998",
+    PremiumOnly = false
+})
+
+-- Infinite Yield Button
+GeneralTab:AddButton({
+    Name = "Infinite Yield",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
+    end
+})
+
+-- Anti Void Button
+GeneralTab:AddButton({
+    Name = "Anti Void",
+    Callback = function()
+        local part = Instance.new("Part") -- Tworzenie nowego partu
+        part.Size = Vector3.new(3502, 0.1, 2175) -- Ustawienie rozmiaru partu (X, Y, Z)
+        part.Position = Vector3.new(428, 1470, 378.5) -- Ustawienie pozycji środka partu
+        part.Anchored = true -- Ustawienie partu jako anchored, aby nie spadał
+        part.Parent = game.Workspace -- Dodanie partu do Workspace
+    end
+})
+
+-- Fly GUI Button
+GeneralTab:AddButton({
+    Name = "Fly Gui",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"))()
+    end
+})
+
+-- Anti Bye Button
+GeneralTab:AddButton({
+    Name = "Anti Bye, Anti Canada, Anti Brazil",
+    Callback = function()
+        local player = game.Players.LocalPlayer
+
+        -- Funkcja do teleportacji
+        local function teleportCharacter()
+            local character = player.Character or player.CharacterAdded:Wait()
+            local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+
+            if humanoidRootPart then
+                humanoidRootPart.CFrame = CFrame.new(18, 1499, 7) -- Teleportuj na nowe współrzędne
+            end
+        end
+
+        while true do
+            wait(0.001) -- Opóźnienie 1 milisekundy
+
+            local character = player.Character or player.CharacterAdded:Wait()
+            local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+
+            if humanoidRootPart then
+                local Y = humanoidRootPart.Position.Y
+
+                if Y >= 1283 and Y <= 1470 then -- Zmiana zakresu Y
+                    teleportCharacter() -- Teleportuj na nowe współrzędne
+                end
+            end
+        end
+    end
+})
+
+-- ESP Button
+GeneralTab:AddButton({
+    Name = "ESP",
+    Callback = function()
+        -- Highlight ESP
+        local FillColor = Color3.fromRGB(255, 255, 255)
+        local DepthMode = "AlwaysOnTop"
+        local FillTransparency = 0.5
+        local OutlineColor = Color3.fromRGB(255, 255, 255)
+        local OutlineTransparency = 0.5
+        local CoreGui = game:GetService("CoreGui")
+        local Players = game:GetService("Players")
+        local lp = Players.LocalPlayer
+        local connections = {}
+        local Storage = Instance.new("Folder")
+        Storage.Parent = CoreGui
+        Storage.Name = "Highlight_Storage"
+
+        local function Highlight(plr)
+            local Highlight = Instance.new("Highlight")
+            Highlight.Name = plr.Name
+            Highlight.FillColor = FillColor
+            Highlight.DepthMode = DepthMode
+            Highlight.FillTransparency = FillTransparency
+            Highlight.OutlineColor = OutlineColor
+            Highlight.OutlineTransparency = OutlineTransparency
+            Highlight.Parent = Storage
+
+            local plrchar = plr.Character
+            if plrchar then Highlight.Adornee = plrchar end
+
+            connections[plr] = plr.CharacterAdded:Connect(function(char) Highlight.Adornee = char end)
+        end
+
+        Players.PlayerAdded:Connect(Highlight)
+        for _, v in next, Players:GetPlayers() do Highlight(v) end
+        Players.PlayerRemoving:Connect(function(plr)
+            local plrname = plr.Name
+            if Storage[plrname] then Storage[plrname]:Destroy() end
+            if connections[plr] then connections[plr]:Disconnect() end
+        end)
+    end
+})
+
+-- Kategoria "Player"
+local PlayerTab = Window:MakeTab({
+    Name = "Player",
+    Icon = "rbxassetid://4483345998",
+    PremiumOnly = false
+})
+
+-- WalkSpeed Slider
+PlayerTab:AddSlider({
+    Name = "Set WalkSpeed",
+    Min = 16,
+    Max = 100,
+    Default = 16,
+    Color = Color3.fromRGB(255, 255, 255),
+    Increment = 1,
+    Callback = function(Value)
+        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Value
+    end
+})
+
+-- JumpPower Slider
+PlayerTab:AddSlider({
+    Name = "Set JumpPower",
+    Min = 50,
+    Max = 150,
+    Default = 50,
+    Color = Color3.fromRGB(255, 255, 255),
+    Increment = 1,
+    Callback = function(Value)
+        game.Players.LocalPlayer.Character.Humanoid.JumpPower = Value
+    end
+})
+
+-- Auto Enter Arena Feature
+local autoEnterEnabled = false -- Zmienna do kontrolowania stanu
+
+GeneralTab:AddToggle({
+    Name = "Auto Enter Arena",
+    Default = false,
+    Callback = function(Value)
+        autoEnterEnabled = Value -- Ustawienie stanu na podstawie opcji
+        local player = game.Players.LocalPlayer
+
+        if autoEnterEnabled then
+            while autoEnterEnabled do -- Pętla będzie działać tylko, gdy autoEnterEnabled jest true
+                wait(1) -- Co 1 sekundę sprawdzaj położenie gracza
+                local character = player.Character or player.CharacterAdded:Wait()
+                local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+                if humanoidRootPart then
+                    local position = humanoidRootPart.Position
+                    -- Sprawdzanie czy gracz jest w danym zakresie
+                    if position.X >= -227 and position.X <= 208 and position.Y >= 1557 and position.Y <= 1573 and position.Z >= -253 and position.Z <= -202 then
+                        humanoidRootPart.CFrame = CFrame.new(-225, 1559, -222) -- Teleportuj na nowe współrzędne
+                    end
+                end
+            end
+        end
+    end
+})
